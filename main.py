@@ -78,11 +78,14 @@ Examples:
     parser.add_argument("--style", "-s", type=str, default="cinematic",
                        choices=["cinematic", "documentary", "commercial", "artistic", "anime"],
                        help="Visual style preset (default: cinematic)")
+    parser.add_argument("--provider", "-p", type=str, default="gemini",
+                       choices=["gemini", "groq"],
+                       help="AI provider (default: gemini)")
     parser.add_argument("--format", "-f", type=str, default="all",
                        choices=["csv", "json", "markdown", "all"],
                        help="Output format (default: all)")
-    parser.add_argument("--model", "-m", type=str, default="gemini-2.0-flash-exp",
-                       help="Gemini model to use (default: gemini-2.0-flash-exp)")
+    parser.add_argument("--model", "-m", type=str, default=None,
+                       help="Model to use (default: gemini-2.0-flash-exp for Gemini, llama-3.3-70b-versatile for Groq)")
     parser.add_argument("--target-duration", "-d", type=int, default=None,
                        help="Target video duration in seconds (optional)")
     
@@ -112,7 +115,15 @@ Examples:
     console.print("")
     
     # 2. Initialize the Director
-    director = VirtualDirector(style=args.style, model_name=args.model)
+    # Set default model based on provider if not specified
+    model_name = args.model
+    if not model_name:
+        if args.provider == 'groq':
+            model_name = 'llama-3.3-70b-versatile'  # Updated to current supported model
+        else:
+            model_name = 'gemini-2.0-flash-exp'
+    
+    director = VirtualDirector(style=args.style, model_name=model_name, provider=args.provider)
 
     # 3. Process the Story
     scenes = director.process_script(story_text, target_duration=args.target_duration)
@@ -132,7 +143,8 @@ Examples:
     # 5. Export to selected format(s)
     metadata = {
         "style": args.style,
-        "model": args.model,
+        "provider": args.provider,
+        "model": model_name,
         "source_file": args.input
     }
     

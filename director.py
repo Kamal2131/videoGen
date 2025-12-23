@@ -11,7 +11,15 @@ try:
     HAS_GENAI = True
 except ImportError:
     HAS_GENAI = False
-    console.print("[bold yellow]Note:[/bold yellow] 'google-generativeai' library not found. Running in offline MOCK MODE.")
+    console.print("[bold yellow]Note:[/bold yellow] 'google-generativeai' library not found.")
+
+# Try to import Groq
+try:
+    from groq import Groq
+    HAS_GROQ = True
+except ImportError:
+    HAS_GROQ = False
+    console.print("[bold yellow]Note:[/bold yellow] 'groq' library not found.")
 
 
 class VirtualDirector:
@@ -25,20 +33,32 @@ class VirtualDirector:
     - Enhanced scene structure
     """
     
-    def __init__(self, api_key=None, style="cinematic", model_name='gemini-2.0-flash-exp'):
+    def __init__(self, api_key=None, style="cinematic", model_name='gemini-2.0-flash-exp', provider='gemini'):
         """
         Initialize the Virtual Director.
         
         Args:
-            api_key: Google API key (defaults to GOOGLE_API_KEY env var)
+            api_key: API key (defaults to GOOGLE_API_KEY or GROQ_API_KEY env var)
             style: Style preset ('cinematic', 'documentary', 'commercial', 'artistic', 'anime')
-            model_name: Gemini model to use
+            model_name: Model to use (gemini-2.0-flash-exp, llama-3.1-70b-versatile, etc.)
+            provider: AI provider ('gemini' or 'groq')
         """
-        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
+        self.provider = provider.lower()
+        self.api_key = api_key or os.getenv(f"{provider.upper()}_API_KEY")
         self.style = style
         self.style_defaults = get_style_defaults(style)
         self.character_profiles = {}
+        self.model = None
+        self.model_name = model_name
         
+        # Initialize based on provider
+        if self.provider == 'groq':
+            self._init_groq(model_name, style)
+        else:  # default to gemini
+            self._init_gemini(model_name, style)
+    
+    def _init_gemini(self, model_name, style):
+        """Initialize Gemini provider."""
         if HAS_GENAI and self.api_key:
             genai.configure(api_key=self.api_key)
             system_instruction = get_system_instruction(style)
@@ -48,7 +68,7 @@ class VirtualDirector:
                     model_name,
                     system_instruction=system_instruction
                 )
-                console.print(f"[green]✓ Virtual Director ready[/green] (Model: {model_name}, Style: {style})")
+                console.print(f"[green]✓ Virtual Director ready[/green] (Provider: Gemini, Model: {model_name}, Style: {style})")
             except Exception as e:
                 console.print(f"[yellow]Could not initialize {model_name}: {e}[/yellow]")
                 console.print("[yellow]Trying fallback model: gemini-1.5-flash[/yellow]")
@@ -57,16 +77,31 @@ class VirtualDirector:
                         'gemini-1.5-flash',
                         system_instruction=system_instruction
                     )
-                    console.print(f"[green]✓ Virtual Director ready[/green] (Model: gemini-1.5-flash, Style: {style})")
+                    self.model_name = 'gemini-1.5-flash'
+                    console.print(f"[green]✓ Virtual Director ready[/green] (Provider: Gemini, Model: gemini-1.5-flash, Style: {style})")
                 except Exception as e2:
-                    console.print(f"[red]Failed to initialize model: {e2}[/red]")
+                    console.print(f"[red]Failed to initialize Gemini: {e2}[/red]")
                     self.model = None
         else:
-            self.model = None
             if not HAS_GENAI:
-                console.print("[yellow]Virtual Director running in OFFLINE MOCK MODE (Library missing).[/yellow]")
+                console.print("[yellow]Gemini library not installed. Running in MOCK MODE.[/yellow]")
             else:
-                console.print("[bold red]Warning:[/bold red] No API Key found. Running in [bold yellow]MOCK MODE[/bold yellow].")
+                console.print("[bold red]Warning:[/bold red] No GOOGLE_API_KEY found. Running in [bold yellow]MOCK MODE[/bold yellow].")
+    
+    def _init_groq(self, model_name, style):
+        """Initialize Groq provider."""
+        if HAS_GROQ and self.api_key:
+            try:
+                self.model = Groq(api_key=self.api_key)
+                console.print(f"[green]✓ Virtual Director ready[/green] (Provider: Groq, Model: {model_name}, Style: {style})")
+            except Exception as e:
+                console.print(f"[red]Failed to initialize Groq: {e}[/red]")
+                self.model = None
+        else:
+            if not HAS_GROQ:
+                console.print("[yellow]Groq library not installed. Install with: pip install groq[/yellow]")
+            else:
+                console.print("[bold red]Warning:[/bold red] No GROQ_API_KEY found. Running in [bold yellow]MOCK MODE[/bold yellow].")
 
     def process_script(self, script_text, target_duration=None):
         """
@@ -91,12 +126,10 @@ class VirtualDirector:
             prompt += f"\n\nTarget total duration: approximately {target_duration} seconds. Adjust scene count accordingly."
         
         try:
-            response = self.model.generate_content(
-                prompt,
-                generation_config={"response_mime_type": "application/json"}
-            )
-            
-            scenes = json.loads(response.text)
+            if self.provider == 'groq':
+                scenes = self._generate_with_groq(prompt)
+            else:
+                scenes = self._generate_with_gemini(prompt)
             
             # Post-process scenes to ensure completeness
             scenes = self._post_process_scenes(scenes)
@@ -108,6 +141,40 @@ class VirtualDirector:
             console.print(f"[bold red]Error during generation:[/bold red] {e}")
             console.print("[yellow]Falling back to mock output.[/yellow]")
             return self._mock_response(script_text)
+    
+    def _generate_with_gemini(self, prompt):
+        """Generate with Gemini API."""
+        response = self.model.generate_content(
+            prompt,
+            generation_config={"response_mime_type": "application/json"}
+        )
+        return json.loads(response.text)
+    
+    def _generate_with_groq(self, prompt):
+        """Generate with Groq API."""
+        system_instruction = get_system_instruction(self.style)
+        
+        response = self.model.chat.completions.create(
+            model=self.model_name,
+            messages=[
+                {"role": "system", "content": system_instruction},
+                {"role": "user", "content": prompt}
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.7,
+            max_tokens=4000
+        )
+        
+        content = response.choices[0].message.content
+        data = json.loads(content)
+        
+        # Groq returns JSON but might wrap it differently
+        if isinstance(data, dict) and 'scenes' in data:
+            return data['scenes']
+        elif isinstance(data, list):
+            return data
+        else:
+            raise ValueError(f"Unexpected Groq response format: {data}")
 
     def _post_process_scenes(self, scenes):
         """

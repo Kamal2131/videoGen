@@ -1,78 +1,129 @@
 # Master Production Sheet
 
-**Generated:** 2025-12-23 20:01:05
-**Total Scenes:** 3
-**Estimated Duration:** 18 seconds (0.3 minutes)
+**Generated:** 2025-12-23 20:32:31
+**Total Scenes:** 5
+**Estimated Duration:** 28 seconds (0.5 minutes)
 
 ## Generation Settings
-- **Style:** anime
-- **Model:** gemini-2.0-flash-exp
+- **Style:** cinematic
+- **Provider:** groq
+- **Model:** openai/gpt-oss-120b
 - **Source File:** story.txt
 
 ---
 
 ## Scene 1
-**Beat:** लड़का छत पर तारों को देख रहा है (Mock Output)
+**Beat:** राजू छत पर बैठा तारों को देख रहा है
 
 ### Visual Prompt
-> Wide establishing shot: A young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts, sits cross-legged on a terracotta rooftop. The night sky above is filled with countless twinkling stars. Ancient village houses visible in background. 35mm lens, deep focus, 4K resolution, cinematic composition, dreamy atmosphere.
+> Raju, a young Indian boy, approximately 8 years old, wearing a faded white cotton kurta and short denim shorts, short black hair, curious eyes; sitting calmly on the roof of an old village house, gazing at the star‑filled night sky; rooftop with wooden beams, thatched edges, distant village silhouettes under a deep blue sky; 35mm wide-angle, slow dolly push‑in towards him; soft moonlight, cool 5600K, dreamy ethereal glow, 4K resolution, cinematic, high detail, film grain, anamorphic lens flare
 
 | Aspect | Details |
 |--------|---------|
-| 🎥 Camera | Slow crane shot ascending, 35mm lens |
-| 💡 Lighting | Soft moonlight, cool blue tones 5600K, starlight highlights |
-| ⏱️ Duration | 6 seconds |
-| 🔀 Transition | dissolve |
+| 🎥 Camera | Slow dolly push‑in, 35mm wide-angle lens |
+| 💡 Lighting | Soft moonlight, cool 5600K, dreamy ethereal atmosphere |
+| ⏱️ Duration | 5 seconds |
+| 🔀 Transition | cut |
 | 🎬 Motion | low |
-| 🔊 Audio | Gentle night crickets, distant village sounds, soft ambient music |
+| 🔊 Audio | Gentle night crickets with soft ambient wind |
 
 **Key Elements:**
-- boy on rooftop
-- starry sky
-- village backdrop
+- Raju
+- roof
+- night sky
+- stars
 
 ---
 
 ## Scene 2
-**Beat:** आसमान से रहस्यमय रोशनी आती है (Mock Output)
+**Beat:** आसमान से चमकीली रोशनी नीचे आती है, राजू डर जाता है पर नहीं हिलता
 
 ### Visual Prompt
-> Medium close-up: The same young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts, looks upward with widening eyes. Suddenly, an intensely bright white orb of light descends from the clouds above, leaving a shimmering trail. The light reflects in his eyes. 50mm portrait lens, shallow depth of field, high dynamic range, volumetric lighting, hyper-realistic texture.
+> Raju, a young Indian boy, approximately 8 years old, wearing a faded white cotton kurta and short denim shorts, short black hair, curious eyes; watching a brilliant white light streaking down from the sky, eyes widening in fear while remaining rooted to the spot; same rooftop now illuminated by the descending beam, wooden beams highlighted, stars dimmed; 50mm handheld tracking following the light with a quick whip pan to capture its motion; harsh white luminous beam, warm 3200K core against cool moonlight, high contrast, 4K resolution, cinematic, high detail, film grain
 
 | Aspect | Details |
 |--------|---------|
-| 🎥 Camera | Quick tilt up following the light, then zoom in on boy's face, 50mm lens |
-| 💡 Lighting | Dramatic contrast: dark night interrupted by brilliant white light source, rim lighting on boy's face |
-| ⏱️ Duration | 5 seconds |
-| 🔀 Transition | cut |
+| 🎥 Camera | Handheld tracking following the light, quick whip pan, 50mm lens |
+| 💡 Lighting | Harsh white luminous beam, warm 3200K core contrasted with cool moonlight, tense atmosphere |
+| ⏱️ Duration | 4 seconds |
+| 🔀 Transition | dissolve |
 | 🎬 Motion | high |
-| 🔊 Audio | Ethereal whooshing sound, rising tension music, boy's breath |
+| 🔊 Audio | Sharp whoosh of light with subtle tense string crescendo |
 
 **Key Elements:**
-- descending light orb
-- boy's reaction
-- light trail
+- Raju
+- descending light
+- roof
+- tension
 
 ---
 
 ## Scene 3
-**Beat:** रोशनी परी में बदलती है (Mock Output)
+**Beat:** रोशनी परी में बदलती है, परी हाथ बढ़ाती है, राजू भी हाथ बढ़ाता है
 
 ### Visual Prompt
-> Slow motion shot: The bright orb hovers in front of the young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts. The light transforms, revealing a tiny ethereal fairy with translucent dragonfly wings, glowing with soft iridescent light. She extends a delicate hand toward the boy. Anamorphic 2.39:1, bokeh background, magical particles, 8K detail, cinematic color grade with teal and gold tones.
+> Raju, a young Indian boy, approximately 8 years old, wearing a faded white cotton kurta and short denim shorts, short black hair, curious eyes; and a tiny ethereal fairy, about 15 cm tall, with luminous translucent wings, wearing a pastel shimmer dress, hair in a delicate braid, radiant smile; the light transforms into the fairy who smiles and extends her hand while Raju, trembling, reaches his hand toward hers; rooftop bathed in a soft magical glow, stars twinkling faintly; 85mm portrait lens, slow dolly push‑in focusing on the joining hands; soft magical glow, warm 3200K, ethereal pastel illumination, subtle bokeh, 4K resolution, cinematic, high detail, film grain
 
 | Aspect | Details |
 |--------|---------|
-| 🎥 Camera | Circular tracking shot around the transformation, slow push-in, anamorphic lens |
-| 💡 Lighting | Soft internal glow from fairy casting warm 3200K light, magical atmosphere |
-| ⏱️ Duration | 7 seconds |
-| 🔀 Transition | match_cut |
+| 🎥 Camera | Slow dolly push‑in, 85mm portrait lens |
+| 💡 Lighting | Soft magical glow, warm 3200K, ethereal pastel illumination |
+| ⏱️ Duration | 6 seconds |
+| 🔀 Transition | cut |
 | 🎬 Motion | medium |
-| 🔊 Audio | Magical chimes, soft ethereal vocals, transformation sound effect |
+| 🔊 Audio | Delicate chime with a faint fairy twinkle motif |
 
 **Key Elements:**
-- light transformation
-- fairy appearance
-- outstretched hand
+- Raju
+- fairy
+- hand extension
+- magical glow
+
+---
+
+## Scene 4
+**Beat:** उंगलियाँ मिलते ही चारों तरफ जादुई चमक फैलती है
+
+### Visual Prompt
+> Raju, a young Indian boy, approximately 8 years old, wearing a faded white cotton kurta and short denim shorts, short black hair, curious eyes; and the tiny ethereal fairy, about 15 cm tall, with luminous translucent wings, wearing a pastel shimmer dress, hair in a delicate braid, radiant smile; their fingertips touch, releasing a burst of sparkling magical light that spreads outward, enveloping the rooftop; rooftop now shimmering with particles, night turning surreal; 35mm wide-angle, crane shot rising to capture the expanding sparkle across foreground and background; sparkling particles with teal and orange color grade, high contrast, dreamy, 4K resolution, cinematic, high detail, film grain
+
+| Aspect | Details |
+|--------|---------|
+| 🎥 Camera | Crane shot rising, 35mm wide-angle lens |
+| 💡 Lighting | Sparkling particles with teal and orange color grade, dreamy high‑contrast illumination |
+| ⏱️ Duration | 5 seconds |
+| 🔀 Transition | fade |
+| 🎬 Motion | medium |
+| 🔊 Audio | Rising synth pad with sparkling arpeggio |
+
+**Key Elements:**
+- Raju
+- fairy
+- sparkle burst
+- magic particles
+
+---
+
+## Scene 5
+**Beat:** राजू और परी बादलों के ऊपर उड़ते हैं, नीचे गाँव खिलौने जैसा दिखता है
+
+### Visual Prompt
+> Raju, a young Indian boy, approximately 8 years old, wearing a faded white cotton kurta and short denim shorts, short black hair, curious eyes; and the tiny ethereal fairy, about 15 cm tall, with luminous translucent wings, wearing a pastel shimmer dress, hair in a delicate braid, radiant smile; both lift off the roof and soar above fluffy white clouds, flying together as the sleeping village below appears like a tiny toy; high above clouds at sunrise, golden light spreading across the sky, expansive horizon in scope; anamorphic 2.39:1 lens, sweeping crane/tilt aerial tracking shot following their flight; golden hour backlight, warm 3200K, dreamy atmosphere with soft lens flare, 4K resolution, cinematic, high detail, film grain, subtle teal‑orange grading
+
+| Aspect | Details |
+|--------|---------|
+| 🎥 Camera | Sweeping crane/tilt aerial tracking, anamorphic 2.39:1 lens |
+| 💡 Lighting | Golden hour backlight, warm 3200K, dreamy with soft lens flare |
+| ⏱️ Duration | 8 seconds |
+| 🔀 Transition | match_cut |
+| 🎬 Motion | high |
+| 🔊 Audio | Uplifting orchestral swell with gentle wind whoosh |
+
+**Key Elements:**
+- Raju
+- fairy
+- flight
+- clouds
+- toy‑like village
 
 ---
