@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "generated_at": "2025-12-23T20:01:05.836008",
+    "total_scenes": 3,
+    "total_duration_seconds": 18,
+    "style": "anime",
+    "model": "gemini-2.0-flash-exp",
+    "source_file": "story.txt"
+  },
+  "scenes": [
+    {
+      "scene_number": 1,
+      "narrative_beat": "लड़का छत पर तारों को देख रहा है (Mock Output)",
+      "visual_prompt": "Wide establishing shot: A young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts, sits cross-legged on a terracotta rooftop. The night sky above is filled with countless twinkling stars. Ancient village houses visible in background. 35mm lens, deep focus, 4K resolution, cinematic composition, dreamy atmosphere.",
+      "camera_movement": "Slow crane shot ascending, 35mm lens",
+      "mood_lighting": "Soft moonlight, cool blue tones 5600K, starlight highlights",
+      "duration_seconds": 6,
+      "transition_type": "dissolve",
+      "motion_intensity": "low",
+      "key_elements": [
+        "boy on rooftop",
+        "starry sky",
+        "village backdrop"
+      ],
+      "audio_suggestion": "Gentle night crickets, distant village sounds, soft ambient music"
+    },
+    {
+      "scene_number": 2,
+      "narrative_beat": "आसमान से रहस्यमय रोशनी आती है (Mock Output)",
+      "visual_prompt": "Medium close-up: The same young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts, looks upward with widening eyes. Suddenly, an intensely bright white orb of light descends from the clouds above, leaving a shimmering trail. The light reflects in his eyes. 50mm portrait lens, shallow depth of field, high dynamic range, volumetric lighting, hyper-realistic texture.",
+      "camera_movement": "Quick tilt up following the light, then zoom in on boy's face, 50mm lens",
+      "mood_lighting": "Dramatic contrast: dark night interrupted by brilliant white light source, rim lighting on boy's face",
+      "duration_seconds": 5,
+      "transition_type": "cut",
+      "motion_intensity": "high",
+      "key_elements": [
+        "descending light orb",
+        "boy's reaction",
+        "light trail"
+      ],
+      "audio_suggestion": "Ethereal whooshing sound, rising tension music, boy's breath"
+    },
+    {
+      "scene_number": 3,
+      "narrative_beat": "रोशनी परी में बदलती है (Mock Output)",
+      "visual_prompt": "Slow motion shot: The bright orb hovers in front of the young Indian boy, approximately 10 years old, wearing a faded blue cotton shirt and dark shorts. The light transforms, revealing a tiny ethereal fairy with translucent dragonfly wings, glowing with soft iridescent light. She extends a delicate hand toward the boy. Anamorphic 2.39:1, bokeh background, magical particles, 8K detail, cinematic color grade with teal and gold tones.",
+      "camera_movement": "Circular tracking shot around the transformation, slow push-in, anamorphic lens",
+      "mood_lighting": "Soft internal glow from fairy casting warm 3200K light, magical atmosphere",
+      "duration_seconds": 7,
+      "transition_type": "match_cut",
+      "motion_intensity": "medium",
+      "key_elements": [
+        "light transformation",
+        "fairy appearance",
+        "outstretched hand"
+      ],
+      "audio_suggestion": "Magical chimes, soft ethereal vocals, transformation sound effect"
+    }
+  ]
+}
