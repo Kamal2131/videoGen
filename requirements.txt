@@ -2,3 +2,13 @@ python-dotenv
 google-generativeai
 groq
 rich
+
+# Google Veo 2 Video Generation (Gemini API)
+google-genai
+
+# Google Veo 2 Video Generation (Vertex AI)
+google-cloud-aiplatform>=1.40.0
+google-auth>=2.25.0
+
+# Optional: Video stitching/processing
+# ffmpeg-python>=0.2.0

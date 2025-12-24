@@ -71,16 +71,18 @@ Examples:
         """
     )
     
-    parser.add_argument("--input", "-i", type=str, default="story.txt", 
-                       help="Path to the story file (default: story.txt)")
+    parser.add_argument("--input", "-i", dest="input_file", required=False,
+                       help="Path to input story text file")
+    parser.add_argument("--load-file", "-l", dest="load_file",
+                       help="Path to existing JSON production sheet (skips LLM generation)")
     parser.add_argument("--output", "-o", type=str, default="production_sheet", 
                        help="Base name for output files without extension (default: production_sheet)")
     parser.add_argument("--style", "-s", type=str, default="cinematic",
                        choices=["cinematic", "documentary", "commercial", "artistic", "anime"],
                        help="Visual style preset (default: cinematic)")
-    parser.add_argument("--provider", "-p", type=str, default="gemini",
+    parser.add_argument("--provider", "-p", type=str, default=os.getenv("DEFAULT_PROVIDER", "gemini"),
                        choices=["gemini", "groq"],
-                       help="AI provider (default: gemini)")
+                       help="AI provider (default: from .env or gemini)")
     parser.add_argument("--format", "-f", type=str, default="all",
                        choices=["csv", "json", "markdown", "all"],
                        help="Output format (default: all)")
@@ -88,6 +90,14 @@ Examples:
                        help="Model to use (default: gemini-2.0-flash-exp for Gemini, llama-3.3-70b-versatile for Groq)")
     parser.add_argument("--target-duration", "-d", type=int, default=None,
                        help="Target video duration in seconds (optional)")
+    
+    # Video generation arguments
+    parser.add_argument("--generate-videos", action="store_true",
+                       help="Generate actual videos using Google Veo 2 API (requires GCP setup)")
+    parser.add_argument("--video-output-dir", type=str, default="generated_videos",
+                       help="Directory to save generated videos (default: generated_videos)")
+    parser.add_argument("--parallel-videos", type=int, default=2,
+                       help="Number of videos to generate in parallel (default: 2)")
     
     args = parser.parse_args()
 
@@ -98,35 +108,68 @@ Examples:
         border_style="cyan"
     ))
 
-    # 1. Read the Input Script
-    if not os.path.exists(args.input):
-        console.print(f"[bold red]✗ Error:[/bold red] File '{args.input}' not found.")
-        return
+    
+    # Initialize variables
+    scenes = []
+    model_name = args.model or "unknown"
+    
+    # PATH A: Load existing scenes (Manual/No-LLM Mode)
+    if args.load_file:
+        if not os.path.exists(args.load_file):
+            console.print(f"[red]Error: File not found: {args.load_file}[/red]")
+            return
+            
+        console.print(f"[bold cyan]📂 Loading scenes from: {args.load_file}[/bold cyan]")
+        try:
+            import json
+            with open(args.load_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # Handle both raw list and envelope format
+                if isinstance(data, dict) and "scenes" in data:
+                    scenes = data["scenes"]
+                    model_name = data.get("metadata", {}).get("model", "manual-load")
+                elif isinstance(data, list):
+                    scenes = data
+                    model_name = "manual-list"
+                else:
+                    console.print("[red]Error: Invalid JSON format. Expected list of scenes or object with 'scenes' key.[/red]")
+                    return
+            console.print(f"[green]✓ Successfully loaded {len(scenes)} scenes[/green]")
+            
+        except Exception as e:
+            console.print(f"[red]Error loading file: {e}[/red]")
+            return
 
-    with open(args.input, "r", encoding="utf-8") as f:
-        story_text = f.read()
+    # PATH B: Generate using AI Director (LLM Mode)
+    elif args.input_file:
+        if not os.path.exists(args.input_file):
+            console.print(f"[bold red]✗ Error:[/bold red] File '{args.input_file}' not found.")
+            return
 
-    console.print(f"[bold blue]📖 Story Loaded:[/bold blue] {args.input}")
-    console.print(f"[bold blue]🎨 Style:[/bold blue] {args.style.capitalize()}")
-    
-    if args.target_duration:
-        console.print(f"[bold blue]⏱️  Target Duration:[/bold blue] {args.target_duration}s")
-    
-    console.print("")
-    
-    # 2. Initialize the Director
-    # Set default model based on provider if not specified
-    model_name = args.model
-    if not model_name:
-        if args.provider == 'groq':
-            model_name = 'llama-3.3-70b-versatile'  # Updated to current supported model
+        with open(args.input_file, "r", encoding="utf-8") as f:
+            story_text = f.read()
+
+        console.print(f"[bold blue]📖 Story Loaded:[/bold blue] {args.input_file}")
+        console.print(f"[bold blue]🎨 Style:[/bold blue] {args.style.capitalize()}")
+        
+        # Determine model default if not provided
+        if not args.model:
+            if args.provider == 'groq':
+                model_name = 'llama-3.3-70b-versatile'
+            else:
+                model_name = 'gemini-2.0-flash-exp'
         else:
-            model_name = 'gemini-2.0-flash-exp'
-    
-    director = VirtualDirector(style=args.style, model_name=model_name, provider=args.provider)
-
-    # 3. Process the Story
-    scenes = director.process_script(story_text, target_duration=args.target_duration)
+            model_name = args.model
+            
+        director = VirtualDirector(style=args.style, model_name=model_name, provider=args.provider)
+        
+        console.print(f"[bold cyan]🎬 Director analyzing script...[/bold cyan]")
+        scenes = director.process_script(story_text, target_duration=args.target_duration)
+        
+    else:
+        console.print("[red]Error: You must provide either --input (to generate) or --load-file (to load existing)[/red]")
+        parser.print_help()
+        return
 
     if not scenes:
         console.print("[red]✗ No scenes generated.[/red]")
@@ -145,7 +188,7 @@ Examples:
         "style": args.style,
         "provider": args.provider,
         "model": model_name,
-        "source_file": args.input
+        "source_file": args.input_file or args.load_file
     }
     
     if args.target_duration:
@@ -179,7 +222,41 @@ Examples:
         console.print(f"  • {file}")
     
     console.print("")
-    console.print("[dim]💡 Tip: Use these prompts directly in Google Veo (Flow), Runway, or other AI video generators![/dim]")
+    
+    # 6. Optional: Generate actual videos using Veo 2 API
+    if args.generate_videos:
+        try:
+            from video_generator import VeoVideoGenerator
+            
+            console.print("[bold cyan]🎥 Starting Video Generation...[/bold cyan]")
+            console.print("")
+            
+            generator = VeoVideoGenerator(
+                project_id=os.getenv("GCP_PROJECT_ID"),
+                location=os.getenv("GCP_LOCATION", "us-central1")
+            )
+            
+            # Generate videos for all scenes
+            video_files = generator.generate_batch(
+                scenes,
+                output_dir=args.video_output_dir,
+                parallel_count=args.parallel_videos
+            )
+            
+            console.print("")
+            if video_files:
+                console.print("[bold green]✓ Videos generated successfully![/bold green]")
+                console.print(f"[green]Output directory: {args.video_output_dir}[/green]")
+            else:
+                console.print("[yellow]⚠ No videos were generated. Check errors above.[/yellow]")
+        
+        except ImportError:
+            console.print("[red]Error: Video generation requires google-cloud-aiplatform[/red]")
+            console.print("[yellow]Install with: pip install google-cloud-aiplatform[/yellow]")
+        except Exception as e:
+            console.print(f"[red]Video generation failed: {e}[/red]")
+    else:
+        console.print("[dim]💡 Tip: Use these prompts in Google Veo (Flow), Runway, or add --generate-videos to auto-generate![/dim]")
 
 
 if __name__ == "__main__":
